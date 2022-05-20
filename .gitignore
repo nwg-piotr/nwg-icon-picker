@@ -1,0 +1,6 @@
+/.idea
+/venv
+/nwg_icon_picker.egg-info/
+/build/
+/dist/
+/nwg_icon_picker/__pycache__
