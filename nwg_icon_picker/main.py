@@ -20,6 +20,7 @@ result_label = None
 button = None
 
 grid = None
+icon_names = []
 icon_list = None
 
 
@@ -44,6 +45,30 @@ class ContextListRow(Gtk.ListBoxRow):
         box.pack_start(lbl, False, False, 0)
 
 
+def on_search_changed(sb):
+    global icon_list, grid, result_label
+
+    phrase = sb.get_text()
+    if phrase and len(phrase) > 2:
+        if icon_list:
+            icon_list.destroy()
+        scrolled_window = Gtk.ScrolledWindow.new(None, None)
+        scrolled_window.set_propagate_natural_width(True)
+        scrolled_window.set_propagate_natural_height(True)
+        icon_list = scrolled_window
+        grid.attach(scrolled_window, 1, 1, 1, 1)
+        lb = Gtk.ListBox.new()
+        scrolled_window.add(lb)
+
+        for name in icon_names:
+            if phrase in name:
+                row = IconListRow(name)
+                lb.add(row)
+
+        grid.show_all()
+        return scrolled_window
+
+
 def build_icon_list(ebox, ebtn, context=None):
     global icon_list, grid, result_label
     if icon_list:
@@ -55,17 +80,17 @@ def build_icon_list(ebox, ebtn, context=None):
     grid.attach(scrolled_window, 1, 1, 1, 1)
 
     if context:
-        icon_names = gtk_icon_theme.list_icons(context)
-        icon_names.sort(key=str.casefold)
+        icon_names_in_ctx = gtk_icon_theme.list_icons(context)
+        icon_names_in_ctx.sort(key=str.casefold)
 
         icon_list = scrolled_window
         lb = Gtk.ListBox.new()
         scrolled_window.add(lb)
-        for name in icon_names:
+        for name in icon_names_in_ctx:
             row = IconListRow(name)
             lb.add(row)
 
-        result_label.set_markup("{} icons in <b>{}</b>".format(len(icon_names), context))
+        result_label.set_markup("{} icons in <b>{}</b>".format(len(icon_names_in_ctx), context))
 
     grid.show_all()
 
@@ -118,7 +143,8 @@ def main():
     global contexts
     contexts = gtk_icon_theme.list_contexts()
 
-    # icon_names = gtk_icon_theme.list_icons()
+    global icon_names
+    icon_names = gtk_icon_theme.list_icons()
 
     # print(gtk_icon_theme.lookup_icon("foot", 48, 0).get_filename())
 
@@ -146,6 +172,7 @@ def main():
 
     global search_entry
     search_entry = Gtk.SearchEntry()
+    search_entry.connect("search-changed", on_search_changed)
     grid.attach(search_entry, 0, 0, 1, 1)
 
     global result_label
@@ -157,6 +184,7 @@ def main():
     grid.attach(lb, 0, 1, 1, 1)
 
     window.show_all()
+    search_entry.grab_focus()
     Gtk.main()
 
 
