@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+
+Name=Icon picker
+Name[pl]=Selektor ikon
+
+GenericName=nwg-shell icon picker
+GenericName[pl]=Selektor icon nwg-shell
+
+Comment=Tool to search and choose GTK icons
+Comment[pl]=Narzędzie do wyszukiwania i wybierania ikon GTK
+
+Exec=nwg-icon-picker
+Icon=nwg-icon-picker
+Terminal=false
+Categories=Utility;
