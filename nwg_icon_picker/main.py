@@ -7,7 +7,7 @@ import gi
 
 gi.require_version('Gtk', '3.0')
 
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk, Gdk, GLib
 
 dir_name = os.path.dirname(__file__)
 
@@ -43,7 +43,9 @@ def on_search_changed(sb):
                 lb.add(row)
 
         result_wrapper_box.show_all()
-        return scrolled_window
+    else:
+        if result_scrolled_window:
+            result_scrolled_window.destroy()
 
 
 class IconListRow(Gtk.ListBoxRow):
@@ -120,20 +122,34 @@ def on_row_activate(row, name):
     Gtk.main_quit()
 
 
+def handle_keyboard(window, event):
+    if event.type == Gdk.EventType.KEY_RELEASE:
+        phrase = search_entry.get_text()
+        if event.keyval == Gdk.KEY_Escape:
+            if len(phrase) > 0:
+                search_entry.grab_focus()
+                search_entry.set_text("")
+            else:
+                Gtk.main_quit()
+        elif event.keyval == Gdk.KEY_BackSpace and not search_entry.is_focus():
+            search_entry.set_text(phrase[:-1])
+            search_entry.grab_focus_without_selecting()
+            search_entry.set_position(len(phrase)-1)
+
+
 def main():
     GLib.set_prgname('nwg-icon-picker')
 
+    global gtk_theme_name, gtk_icon_theme, icon_names, icon_info, search_entry, result_wrapper_box
     window = Gtk.Window()
     window.connect("destroy", Gtk.main_quit)
+    window.connect("key-release-event", handle_keyboard)
 
-    global gtk_theme_name
     gtk_settings = Gtk.Settings.get_default()
-    gtk_theme_name = gtk_settings.get_property("gtk-icon-theme-name")
 
-    global gtk_icon_theme
+    gtk_theme_name = gtk_settings.get_property("gtk-icon-theme-name")
     gtk_icon_theme = Gtk.IconTheme.get_default()
 
-    global icon_names
     icon_names = gtk_icon_theme.list_icons()
     print("Found {} icons".format(len(icon_names)), file=sys.stderr)
     icon_names.sort(key=str.casefold)
@@ -145,16 +161,13 @@ def main():
     vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 6)
     hbox.pack_start(vbox, True, True, 0)
 
-    global icon_info
     icon_info = IconInfo("nwg-icon-picker")
     vbox.pack_start(icon_info, False, False, 0)
 
-    global search_entry
     search_entry = Gtk.SearchEntry()
     search_entry.connect("search-changed", on_search_changed)
     vbox.pack_start(search_entry, False, False, 0)
 
-    global result_wrapper_box
     result_wrapper_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
     vbox.pack_start(result_wrapper_box, False, False, 0)
 
