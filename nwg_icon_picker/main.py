@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+"""
+nwg-icon-picker is a simple GTK icon chooser with textual search capability.
+Project: https://github.com/nwg-piotr/nwg-icon-chooser
+Author's email: nwg.piotr@gmail.com
+Copyright (c) 2022 Piotr Miller
+License: MIT
+"""
+
 import argparse
 import sys
 
