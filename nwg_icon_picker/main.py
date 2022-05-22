@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os
+import argparse
 import sys
 
 import gi
@@ -9,7 +9,7 @@ gi.require_version('Gtk', '3.0')
 
 from gi.repository import Gtk, Gdk, GLib
 
-dir_name = os.path.dirname(__file__)
+from nwg_icon_picker.__about__ import __version__
 
 gtk_theme_name = ""
 gtk_icon_theme = None
@@ -139,6 +139,14 @@ def handle_keyboard(window, event):
 
 def main():
     GLib.set_prgname('nwg-icon-picker')
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-v",
+                        "--version",
+                        action="version",
+                        version="%(prog)s version {}".format(__version__),
+                        help="display version information")
+    parser.parse_args()
 
     global gtk_theme_name, gtk_icon_theme, icon_names, icon_info, search_entry, result_wrapper_box
     window = Gtk.Window()
