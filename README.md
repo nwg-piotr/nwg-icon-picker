@@ -9,4 +9,11 @@ It displays a window to choose an icon with a textual search entry, and returns 
 
 ![2022-05-22-025531_screenshot](https://user-images.githubusercontent.com/20579136/169673841-82b6a8b3-982d-4498-9eda-d8bbed17b2fd.png)
 
+## Dependencies
+
+- gtk3
+- python (python3)
+- python-gobject
+- python-setuptools (make)
+
 [![Packaging status](https://repology.org/badge/vertical-allrepos/nwg-icon-picker.svg)](https://repology.org/project/nwg-icon-picker/versions)
