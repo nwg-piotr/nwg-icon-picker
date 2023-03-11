@@ -1,6 +1,8 @@
 # nwg-icon-picker
 
-This program is a part of the [nwg-shell](https://github.com/nwg-piotr/nwg-shell) project.
+This application is a part of the [nwg-shell](https://nwg-piotr.github.io/nwg-shell) project.
+
+**Contributing:** please read the [general contributing rules for the nwg-shell project](https://nwg-piotr.github.io/nwg-shell/contribution).
 
 I was looking for a GTK icon browser with a good textual search feature. Turns out it's easier to write one in less than 150 sloc.
 
