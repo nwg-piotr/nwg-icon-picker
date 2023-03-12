@@ -9,6 +9,7 @@ License: MIT
 """
 
 import argparse
+import subprocess
 import sys
 
 import gi
@@ -29,6 +30,19 @@ result_wrapper_box = None
 icon_names = []
 result_scrolled_window = None
 
+gimp, inkscape = False, False
+icon_path = ""
+
+
+def is_command(cmd):
+    try:
+        is_cmd = subprocess.check_output(
+            "command -v {}".format(cmd), shell=True).decode("utf-8").strip()
+        if is_cmd:
+            return True
+
+    except subprocess.CalledProcessError:
+        return False
 
 def on_search_changed(sb):
     global result_scrolled_window
@@ -99,17 +113,30 @@ class IconInfo(Gtk.Box):
 
         self.button.connect("clicked", on_button_clicked)
 
+        hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 6)
+        self.pack_start(hbox, False, False, 6)
+
         self.lbl_filename = Gtk.Label()
         self.lbl_filename.set_line_wrap(True)
-        self.lbl_filename.set_property("margin-top", 6)
         self.lbl_filename.set_selectable(True)
-        self.pack_start(self.lbl_filename, False, False, 0)
+        hbox.pack_start(self.lbl_filename, True, False, 0)
+
+        if gimp:
+            self.btn_gimp = Gtk.Button.new_from_icon_name("gimp", Gtk.IconSize.BUTTON)
+            self.btn_gimp.connect("clicked", on_btn_gimp)
+            hbox.pack_start(self.btn_gimp, False, False, 0)
+        if inkscape:
+            self.btn_inkscape = Gtk.Button.new_from_icon_name("org.inkscape.Inkscape", Gtk.IconSize.BUTTON)
+            self.btn_inkscape.connect("clicked", on_btn_inkscape)
+            hbox.pack_start(self.btn_inkscape, False, False, 0)
 
         self.update(name)
 
     def update(self, name):
         info = gtk_icon_theme.lookup_icon(name, 96, 0)
-        self.lbl_filename.set_text(info.get_filename())
+        global icon_path
+        icon_path = info.get_filename()
+        self.lbl_filename.set_text(icon_path)
 
         img = Gtk.Image.new_from_icon_name(name, Gtk.IconSize.DIALOG)
         self.button.set_image(img)
@@ -123,6 +150,18 @@ class IconInfo(Gtk.Box):
 def on_button_clicked(btn):
     print(btn.get_label())
     Gtk.main_quit()
+
+
+def on_btn_gimp(btn):
+    if icon_path:
+        subprocess.Popen("gimp {}".format(icon_path), shell=True)
+        Gtk.main_quit()
+
+
+def on_btn_inkscape(btn):
+    if icon_path:
+        subprocess.Popen("inkscape {}".format(icon_path), shell=True)
+        Gtk.main_quit()
 
 
 def on_row_activate(row, name):
@@ -156,6 +195,11 @@ def main():
                         help="display version information")
     parser.parse_args()
 
+    global gimp, inkscape, btn_gimp, btn_inkscape
+    gimp = is_command("gimp")
+    inkscape = is_command("inkscape")
+
+
     global gtk_theme_name, gtk_icon_theme, icon_names, icon_info, search_entry, result_wrapper_box
     window = Gtk.Window()
     window.connect("destroy", Gtk.main_quit)
@@ -174,7 +218,7 @@ def main():
     hbox.set_property("margin", 6)
     window.add(hbox)
 
-    vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 6)
+    vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
     hbox.pack_start(vbox, True, True, 0)
 
     icon_info = IconInfo("nwg-icon-picker")
