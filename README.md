@@ -1,15 +1,14 @@
-# nwg-icon-picker
+<img src="https://github.com/nwg-piotr/nwg-icon-picker/assets/20579136/c6d045d4-f671-4aaf-a1ff-4cadab79b62c" width="90" style="margin-right:10px" align=left alt="logo">
+<H1>nwg-icon-picker</H1><br>
 
 This application is a part of the [nwg-shell](https://nwg-piotr.github.io/nwg-shell) project.
-
-**Contributing:** please read the [general contributing rules for the nwg-shell project](https://nwg-piotr.github.io/nwg-shell/contribution).
 
 I was looking for a GTK icon browser with a good textual search feature. Turns out it's easier to write one in less than 150 sloc.
 
 This program is intended to work as the icon picker for [nwg-panel](https://github.com/nwg-piotr/nwg-panel), but it may be used standalone.
 It displays a window to choose an icon with a textual search entry, and returns the icon name.
 
-![2022-05-22-025531_screenshot](https://user-images.githubusercontent.com/20579136/169673841-82b6a8b3-982d-4498-9eda-d8bbed17b2fd.png)
+<img src="https://github.com/nwg-piotr/nwg-icon-picker/assets/20579136/0fae642c-0c78-4a67-b42f-949a30de5710" width=640 alt="Screenshot"><br>
 
 ## Dependencies
 
