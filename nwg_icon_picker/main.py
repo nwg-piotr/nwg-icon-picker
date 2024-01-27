@@ -44,6 +44,7 @@ def is_command(cmd):
     except subprocess.CalledProcessError:
         return False
 
+
 def on_search_changed(sb):
     global result_scrolled_window
 
@@ -181,7 +182,7 @@ def handle_keyboard(window, event):
         elif event.keyval == Gdk.KEY_BackSpace and not search_entry.is_focus():
             search_entry.set_text(phrase[:-1])
             search_entry.grab_focus_without_selecting()
-            search_entry.set_position(len(phrase)-1)
+            search_entry.set_position(len(phrase) - 1)
 
 
 def main():
@@ -198,7 +199,6 @@ def main():
     global gimp, inkscape, btn_gimp, btn_inkscape
     gimp = is_command("gimp")
     inkscape = is_command("inkscape")
-
 
     global gtk_theme_name, gtk_icon_theme, icon_names, icon_info, search_entry, result_wrapper_box
     window = Gtk.Window()
