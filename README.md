@@ -14,7 +14,7 @@ name. You can also open a file from the search result in GIMP or Inkscape - if i
 
 ## Installation
 
-Find a package in your Linux distribution repsitories, if possibe.
+Find a package in your Linux distribution repositories, if possible.
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/nwg-icon-picker.svg)](https://repology.org/project/nwg-icon-picker/versions)
 
